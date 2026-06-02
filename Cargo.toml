@@ -1,0 +1,32 @@
+[package]
+name = "kanchi"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.89.0"
+description = "Kanchi (感知 — \"sensing\") — typed environment-discovery primitive: declare detection axes, get the FALLBACK const + detect()→Option + detect_or_fallback() trio generated. The shikumi `discovered()` tier made declarative."
+homepage = "https://github.com/pleme-io/kanchi"
+repository = "https://github.com/pleme-io/kanchi"
+readme = "README.md"
+license = "MIT"
+categories = ["config", "os", "hardware-support"]
+keywords = ["environment", "detection", "config", "defaults", "zero-config"]
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "z"
+strip = true
+
+[dependencies]
+paste = "1"
+libc = "0.2"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", features = ["NSString", "NSUserDefaults"] }
+objc2-app-kit = { version = "0.3", features = ["NSScreen", "NSApplication"] }
