@@ -1,15 +1,15 @@
 name: auto-release
 
 # Three-line consumer shim. Every push to main runs the pleme-io substrate
-# auto-release pipeline, which auto-detects this repo as a Rust single-crate
-# and ships it to crates.io:
+# single-crate auto-release pipeline, shipping kanchi to crates.io:
 #
 #   bump patch  →  regenerate Cargo.gen.lock  →  commit  →  tag  →  push  →  publish
 #
-# All logic lives in pleme-io/actions/* (Rust + tatara-lisp) +
-# pleme-io/substrate/.github/workflows/auto-release.yml. Operators only manage
-# this file; everything else is the substrate's reusable primitive. See the
-# org-level ★★ AUTO-RELEASE directive + substrate/docs/AUTO-RELEASE.md.
+# Uses cargo-auto-release.yml directly (the proven single-crate path, same as
+# kaname/awase) rather than the polymorphic auto-release.yml, which currently
+# references not-yet-shipped per-language workflows. All logic lives in
+# pleme-io/actions/* (Rust + tatara-lisp). Operators only manage this file.
+# See the org-level ★★ AUTO-RELEASE directive + substrate/docs/AUTO-RELEASE.md.
 
 on:
   push:
@@ -23,7 +23,7 @@ on:
 
 jobs:
   release:
-    uses: pleme-io/substrate/.github/workflows/auto-release.yml@main
+    uses: pleme-io/substrate/.github/workflows/cargo-auto-release.yml@main
     with:
       bump-type: ${{ inputs.bump-type || 'patch' }}
     secrets: inherit
