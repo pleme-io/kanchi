@@ -31,6 +31,7 @@
 //! [`probe`], cfg-gated and returning `None` off-platform so the resolver
 //! lands cleanly on the fallback.
 
+pub mod axes;
 pub mod probe;
 
 /// Re-export for the `defaxes!` macro's identifier-pasting. Not public API.

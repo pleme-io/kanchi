@@ -56,6 +56,54 @@ pub fn total_ram_gib() -> Option<u64> {
     total_ram_bytes().map(|b| b / (1024 * 1024 * 1024))
 }
 
+/// Whether the process runs inside a Kubernetes pod. `Some(true)` when the
+/// in-cluster service-account is injected (`KUBERNETES_SERVICE_HOST` env or the
+/// projected SA-token file), `Some(false)` when neither is present. Never
+/// `None` — absence of the signals IS the answer. Cheap (env + one `stat`), no
+/// network.
+#[must_use]
+pub fn in_cluster() -> Option<bool> {
+    let env = std::env::var_os("KUBERNETES_SERVICE_HOST").is_some();
+    let token =
+        std::path::Path::new("/var/run/secrets/kubernetes.io/serviceaccount/token").exists();
+    Some(env || token)
+}
+
+/// The cgroup memory limit in bytes — the real ceiling the workload runs under
+/// (which a container often sees instead of host RAM). cgroup v2
+/// `/sys/fs/cgroup/memory.max`, then v1
+/// `/sys/fs/cgroup/memory/memory.limit_in_bytes`. `None` off-Linux, when
+/// unreadable, or when unlimited (`"max"` / a sentinel ≥ host scale). Linux
+/// only; the read is the documented filesystem reach.
+#[must_use]
+pub fn cgroup_memory_limit_bytes() -> Option<u64> {
+    #[cfg(target_os = "linux")]
+    {
+        // cgroup v2: a single value or the literal "max" (= unlimited).
+        if let Ok(s) = std::fs::read_to_string("/sys/fs/cgroup/memory.max") {
+            let t = s.trim();
+            if t == "max" {
+                return None;
+            }
+            if let Ok(v) = t.parse::<u64>() {
+                return (v > 0).then_some(v);
+            }
+        }
+        // cgroup v1: a huge sentinel (PAGE_COUNTER_MAX rounded) means unlimited.
+        if let Ok(s) = std::fs::read_to_string("/sys/fs/cgroup/memory/memory.limit_in_bytes") {
+            if let Ok(v) = s.trim().parse::<u64>() {
+                // ~8 EiB sentinel ⇒ unlimited; treat as no limit.
+                return (v > 0 && v < (1u64 << 62)).then_some(v);
+            }
+        }
+        None
+    }
+    #[cfg(not(target_os = "linux"))]
+    {
+        None
+    }
+}
+
 #[cfg(target_os = "macos")]
 fn total_ram_bytes() -> Option<u64> {
     let mut size: u64 = 0;
