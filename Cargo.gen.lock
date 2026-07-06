@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "cargo_lock_sha256": "60a3a5b6cc602cdb95449c3d66af4fee1cbe1421f4321f25716f42b8107637bf",
+  "cargo_lock_sha256": "6f2d9cc22b00a0ee2dcb88b06daa39b0f188dfdacaa5b2bc951820fed6b67ecc",
   "target_resolves": {
     "base": {
       "libc-0.2.186": {
@@ -106,7 +106,35 @@
                 "name": "objc2_app_kit",
                 "package_key": "objc2-app-kit-0.3.2",
                 "kind": "normal",
-                "features": [],
+                "features": [
+                  "NSApplication",
+                  "NSScreen"
+                ],
+                "uses_default_features": true,
+                "optional": false,
+                "target": "cfg(target_os = \"macos\")",
+                "tree": "target"
+              },
+              {
+                "name": "objc2_core_foundation",
+                "package_key": "objc2-core-foundation-0.3.2",
+                "kind": "normal",
+                "features": [
+                  "CFArray",
+                  "CFBase"
+                ],
+                "uses_default_features": true,
+                "optional": false,
+                "target": "cfg(target_os = \"macos\")",
+                "tree": "target"
+              },
+              {
+                "name": "objc2_core_graphics",
+                "package_key": "objc2-core-graphics-0.3.2",
+                "kind": "normal",
+                "features": [
+                  "CGDirectDisplay"
+                ],
                 "uses_default_features": true,
                 "optional": false,
                 "target": "cfg(target_os = \"macos\")",
@@ -116,7 +144,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
+                "features": [
+                  "NSString",
+                  "NSUserDefaults"
+                ],
                 "uses_default_features": true,
                 "optional": false,
                 "target": "cfg(target_os = \"macos\")",
@@ -143,7 +174,7 @@
                 "package_key": "objc2-encode-4.1.0",
                 "kind": "normal",
                 "features": [],
-                "uses_default_features": true,
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -208,9 +239,14 @@
                 "name": "objc2_cloud_kit",
                 "package_key": "objc2-cloud-kit-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CKContainer",
+                  "CKRecord",
+                  "CKShare",
+                  "CKShareMetadata"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -218,9 +254,17 @@
                 "name": "objc2_core_data",
                 "package_key": "objc2-core-data-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "NSAttributeDescription",
+                  "NSEntityDescription",
+                  "NSFetchRequest",
+                  "NSManagedObjectContext",
+                  "NSManagedObjectModel",
+                  "NSPersistentStoreRequest",
+                  "NSPropertyDescription"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -228,9 +272,13 @@
                 "name": "objc2_core_foundation",
                 "package_key": "objc2-core-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CFCGTypes",
+                  "CFDate",
+                  "objc2"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": null,
                 "tree": "target"
               },
@@ -238,9 +286,19 @@
                 "name": "objc2_core_graphics",
                 "package_key": "objc2-core-graphics-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CGColor",
+                  "CGColorSpace",
+                  "CGContext",
+                  "CGDirectDisplay",
+                  "CGEventTypes",
+                  "CGFont",
+                  "CGImage",
+                  "CGPath",
+                  "objc2"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -248,9 +306,14 @@
                 "name": "objc2_core_image",
                 "package_key": "objc2-core-image-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CIColor",
+                  "CIContext",
+                  "CIFilter",
+                  "CIImage"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -258,9 +321,15 @@
                 "name": "objc2_core_text",
                 "package_key": "objc2-core-text-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CTFont",
+                  "CTFontCollection",
+                  "CTFontDescriptor",
+                  "CTGlyphInfo",
+                  "objc2"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -268,9 +337,12 @@
                 "name": "objc2_core_video",
                 "package_key": "objc2-core-video-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CVBase",
+                  "objc2"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -278,8 +350,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -288,9 +362,15 @@
                 "name": "objc2_quartz_core",
                 "package_key": "objc2-quartz-core-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CADisplayLink",
+                  "CALayer",
+                  "CAMediaTiming",
+                  "CAMediaTimingFunction",
+                  "CAOpenGLLayer"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               }
@@ -636,8 +716,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -682,8 +764,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -716,12 +800,34 @@
                 "tree": "target"
               },
               {
+                "name": "block2",
+                "package_key": "block2-0.6.2",
+                "kind": "normal",
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
+                "optional": true,
+                "target": null,
+                "tree": "target"
+              },
+              {
                 "name": "dispatch2",
                 "package_key": "dispatch2-0.3.1",
                 "kind": "normal",
                 "features": [
                   "alloc"
                 ],
+                "uses_default_features": false,
+                "optional": true,
+                "target": null,
+                "tree": "target"
+              },
+              {
+                "name": "libc",
+                "package_key": "libc-0.2.186",
+                "kind": "normal",
+                "features": [],
                 "uses_default_features": false,
                 "optional": true,
                 "target": null,
@@ -744,25 +850,58 @@
             "features": [
               "CFArray",
               "CFAttributedString",
+              "CFAvailability",
+              "CFBag",
+              "CFBase",
+              "CFBinaryHeap",
+              "CFBitVector",
+              "CFBundle",
+              "CFByteOrder",
               "CFCGTypes",
               "CFCalendar",
               "CFCharacterSet",
               "CFData",
               "CFDate",
+              "CFDateFormatter",
               "CFDictionary",
               "CFError",
+              "CFFileDescriptor",
               "CFFileSecurity",
               "CFLocale",
               "CFMachPort",
               "CFMessagePort",
+              "CFNotificationCenter",
               "CFNumber",
+              "CFNumberFormatter",
+              "CFPlugIn",
+              "CFPlugInCOM",
+              "CFPreferences",
+              "CFPropertyList",
               "CFRunLoop",
               "CFSet",
+              "CFSocket",
               "CFStream",
               "CFString",
+              "CFStringEncodingExt",
+              "CFStringTokenizer",
+              "CFTimeZone",
+              "CFTree",
               "CFURL",
+              "CFURLAccess",
+              "CFURLEnumerator",
+              "CFUUID",
+              "CFUserNotification",
+              "CFUtilities",
+              "CFXMLNode",
+              "CFXMLParser",
+              "alloc",
               "bitflags",
-              "objc2"
+              "block2",
+              "default",
+              "dispatch2",
+              "libc",
+              "objc2",
+              "std"
             ]
           },
           "objc2-core-graphics-0.3.2": {
@@ -780,12 +919,34 @@
                 "tree": "target"
               },
               {
+                "name": "block2",
+                "package_key": "block2-0.6.2",
+                "kind": "normal",
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
+                "optional": true,
+                "target": null,
+                "tree": "target"
+              },
+              {
                 "name": "dispatch2",
                 "package_key": "dispatch2-0.3.1",
                 "kind": "normal",
                 "features": [
                   "alloc"
                 ],
+                "uses_default_features": false,
+                "optional": true,
+                "target": null,
+                "tree": "target"
+              },
+              {
+                "name": "libc",
+                "package_key": "libc-0.2.186",
+                "kind": "normal",
+                "features": [],
                 "uses_default_features": false,
                 "optional": true,
                 "target": null,
@@ -808,34 +969,84 @@
                 "package_key": "objc2-core-foundation-0.3.2",
                 "kind": "normal",
                 "features": [],
-                "uses_default_features": true,
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
               },
               {
-                "name": "objc2_io_surface",
-                "package_key": "objc2-io-surface-0.3.2",
+                "name": "objc2_metal",
+                "package_key": "objc2-metal-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "MTLDevice"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(not(target_os = \"watchos\"))",
                 "tree": "target"
               }
             ],
             "build_dependencies": [],
             "features": [
+              "CGAffineTransform",
+              "CGBase",
+              "CGBitmapContext",
               "CGColor",
+              "CGColorConversionInfo",
               "CGColorSpace",
               "CGContext",
+              "CGConvertColorDataWithFormat",
+              "CGDataConsumer",
+              "CGDataProvider",
               "CGDirectDisplay",
+              "CGDirectDisplayMetal",
+              "CGDirectPalette",
+              "CGDisplayConfiguration",
+              "CGDisplayFade",
+              "CGDisplayStream",
+              "CGEXRToneMappingGamma",
+              "CGError",
+              "CGEvent",
+              "CGEventSource",
               "CGEventTypes",
               "CGFont",
+              "CGFunction",
+              "CGGeometry",
+              "CGGradient",
+              "CGITUToneMapping",
               "CGImage",
+              "CGLayer",
+              "CGPDFArray",
+              "CGPDFContentStream",
+              "CGPDFContext",
+              "CGPDFDictionary",
+              "CGPDFDocument",
+              "CGPDFObject",
+              "CGPDFOperatorTable",
+              "CGPDFPage",
+              "CGPDFScanner",
+              "CGPDFStream",
+              "CGPDFString",
+              "CGPSConverter",
               "CGPath",
+              "CGPattern",
+              "CGRemoteOperation",
+              "CGRenderingBufferProvider",
+              "CGSession",
+              "CGShading",
+              "CGToneMapping",
+              "CGWindow",
+              "CGWindowLevel",
+              "alloc",
               "bitflags",
-              "objc2"
+              "block2",
+              "default",
+              "dispatch2",
+              "libc",
+              "objc2",
+              "objc2-metal",
+              "std"
             ]
           },
           "objc2-core-image-0.3.2": {
@@ -856,8 +1067,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -902,17 +1115,7 @@
                 "package_key": "objc2-core-foundation-0.3.2",
                 "kind": "normal",
                 "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": null,
-                "tree": "target"
-              },
-              {
-                "name": "objc2_core_graphics",
-                "package_key": "objc2-core-graphics-0.3.2",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -959,29 +1162,9 @@
                 "package_key": "objc2-core-foundation-0.3.2",
                 "kind": "normal",
                 "features": [],
-                "uses_default_features": true,
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
-                "tree": "target"
-              },
-              {
-                "name": "objc2_core_graphics",
-                "package_key": "objc2-core-graphics-0.3.2",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": null,
-                "tree": "target"
-              },
-              {
-                "name": "objc2_io_surface",
-                "package_key": "objc2-io-surface-0.3.2",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": "cfg(not(target_os = \"watchos\"))",
                 "tree": "target"
               }
             ],
@@ -1052,9 +1235,28 @@
                 "name": "objc2_core_foundation",
                 "package_key": "objc2-core-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CFArray",
+                  "CFAttributedString",
+                  "CFCGTypes",
+                  "CFCalendar",
+                  "CFCharacterSet",
+                  "CFData",
+                  "CFDate",
+                  "CFDictionary",
+                  "CFError",
+                  "CFFileSecurity",
+                  "CFLocale",
+                  "CFMachPort",
+                  "CFMessagePort",
+                  "CFRunLoop",
+                  "CFSet",
+                  "CFStream",
+                  "CFURL",
+                  "objc2"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": null,
                 "tree": "target"
               }
@@ -1265,16 +1467,6 @@
                 "optional": true,
                 "target": null,
                 "tree": "target"
-              },
-              {
-                "name": "objc2_core_foundation",
-                "package_key": "objc2-core-foundation-0.3.2",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": null,
-                "tree": "target"
               }
             ],
             "build_dependencies": [],
@@ -1282,6 +1474,54 @@
               "IOSurfaceRef",
               "bitflags",
               "objc2"
+            ]
+          },
+          "objc2-metal-0.3.2": {
+            "runtime_dependencies": [
+              {
+                "name": "bitflags",
+                "package_key": "bitflags-2.12.1",
+                "kind": "normal",
+                "features": [
+                  "std"
+                ],
+                "uses_default_features": false,
+                "optional": true,
+                "target": null,
+                "tree": "target"
+              },
+              {
+                "name": "objc2",
+                "package_key": "objc2-0.6.4",
+                "kind": "normal",
+                "features": [
+                  "std"
+                ],
+                "uses_default_features": false,
+                "optional": false,
+                "target": null,
+                "tree": "target"
+              },
+              {
+                "name": "objc2_foundation",
+                "package_key": "objc2-foundation-0.3.2",
+                "kind": "normal",
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
+                "optional": false,
+                "target": null,
+                "tree": "target"
+              }
+            ],
+            "build_dependencies": [],
+            "features": [
+              "MTLDevice",
+              "MTLGPUAddress",
+              "MTLLibrary",
+              "MTLResource",
+              "bitflags"
             ]
           },
           "objc2-quartz-core-0.3.2": {
@@ -1314,8 +1554,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -1330,6 +1572,66 @@
               "CAOpenGLLayer",
               "bitflags"
             ]
+          }
+        }
+      },
+      "aarch64-unknown-linux-gnu": {
+        "overrides": {
+          "kanchi-0.1.0": {
+            "runtime_dependencies": [
+              {
+                "name": "libc",
+                "package_key": "libc-0.2.186",
+                "kind": "normal",
+                "features": [],
+                "uses_default_features": true,
+                "optional": false,
+                "target": null,
+                "tree": "target"
+              },
+              {
+                "name": "paste",
+                "package_key": "paste-1.0.15",
+                "kind": "normal",
+                "features": [],
+                "uses_default_features": true,
+                "optional": false,
+                "target": null,
+                "tree": "host"
+              }
+            ],
+            "build_dependencies": [],
+            "features": []
+          }
+        }
+      },
+      "aarch64-unknown-linux-musl": {
+        "overrides": {
+          "kanchi-0.1.0": {
+            "runtime_dependencies": [
+              {
+                "name": "libc",
+                "package_key": "libc-0.2.186",
+                "kind": "normal",
+                "features": [],
+                "uses_default_features": true,
+                "optional": false,
+                "target": null,
+                "tree": "target"
+              },
+              {
+                "name": "paste",
+                "package_key": "paste-1.0.15",
+                "kind": "normal",
+                "features": [],
+                "uses_default_features": true,
+                "optional": false,
+                "target": null,
+                "tree": "host"
+              }
+            ],
+            "build_dependencies": [],
+            "features": []
           }
         }
       },
@@ -1421,7 +1723,35 @@
                 "name": "objc2_app_kit",
                 "package_key": "objc2-app-kit-0.3.2",
                 "kind": "normal",
-                "features": [],
+                "features": [
+                  "NSApplication",
+                  "NSScreen"
+                ],
+                "uses_default_features": true,
+                "optional": false,
+                "target": "cfg(target_os = \"macos\")",
+                "tree": "target"
+              },
+              {
+                "name": "objc2_core_foundation",
+                "package_key": "objc2-core-foundation-0.3.2",
+                "kind": "normal",
+                "features": [
+                  "CFArray",
+                  "CFBase"
+                ],
+                "uses_default_features": true,
+                "optional": false,
+                "target": "cfg(target_os = \"macos\")",
+                "tree": "target"
+              },
+              {
+                "name": "objc2_core_graphics",
+                "package_key": "objc2-core-graphics-0.3.2",
+                "kind": "normal",
+                "features": [
+                  "CGDirectDisplay"
+                ],
                 "uses_default_features": true,
                 "optional": false,
                 "target": "cfg(target_os = \"macos\")",
@@ -1431,7 +1761,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
+                "features": [
+                  "NSString",
+                  "NSUserDefaults"
+                ],
                 "uses_default_features": true,
                 "optional": false,
                 "target": "cfg(target_os = \"macos\")",
@@ -1458,7 +1791,7 @@
                 "package_key": "objc2-encode-4.1.0",
                 "kind": "normal",
                 "features": [],
-                "uses_default_features": true,
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -1523,9 +1856,14 @@
                 "name": "objc2_cloud_kit",
                 "package_key": "objc2-cloud-kit-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CKContainer",
+                  "CKRecord",
+                  "CKShare",
+                  "CKShareMetadata"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -1533,9 +1871,17 @@
                 "name": "objc2_core_data",
                 "package_key": "objc2-core-data-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "NSAttributeDescription",
+                  "NSEntityDescription",
+                  "NSFetchRequest",
+                  "NSManagedObjectContext",
+                  "NSManagedObjectModel",
+                  "NSPersistentStoreRequest",
+                  "NSPropertyDescription"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -1543,9 +1889,13 @@
                 "name": "objc2_core_foundation",
                 "package_key": "objc2-core-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CFCGTypes",
+                  "CFDate",
+                  "objc2"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": null,
                 "tree": "target"
               },
@@ -1553,9 +1903,19 @@
                 "name": "objc2_core_graphics",
                 "package_key": "objc2-core-graphics-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CGColor",
+                  "CGColorSpace",
+                  "CGContext",
+                  "CGDirectDisplay",
+                  "CGEventTypes",
+                  "CGFont",
+                  "CGImage",
+                  "CGPath",
+                  "objc2"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -1563,9 +1923,14 @@
                 "name": "objc2_core_image",
                 "package_key": "objc2-core-image-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CIColor",
+                  "CIContext",
+                  "CIFilter",
+                  "CIImage"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -1573,9 +1938,15 @@
                 "name": "objc2_core_text",
                 "package_key": "objc2-core-text-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CTFont",
+                  "CTFontCollection",
+                  "CTFontDescriptor",
+                  "CTGlyphInfo",
+                  "objc2"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -1583,9 +1954,12 @@
                 "name": "objc2_core_video",
                 "package_key": "objc2-core-video-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CVBase",
+                  "objc2"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               },
@@ -1593,8 +1967,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -1603,9 +1979,15 @@
                 "name": "objc2_quartz_core",
                 "package_key": "objc2-quartz-core-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CADisplayLink",
+                  "CALayer",
+                  "CAMediaTiming",
+                  "CAMediaTimingFunction",
+                  "CAOpenGLLayer"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(target_vendor = \"apple\")",
                 "tree": "target"
               }
@@ -1951,8 +2333,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -1997,8 +2381,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -2031,12 +2417,34 @@
                 "tree": "target"
               },
               {
+                "name": "block2",
+                "package_key": "block2-0.6.2",
+                "kind": "normal",
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
+                "optional": true,
+                "target": null,
+                "tree": "target"
+              },
+              {
                 "name": "dispatch2",
                 "package_key": "dispatch2-0.3.1",
                 "kind": "normal",
                 "features": [
                   "alloc"
                 ],
+                "uses_default_features": false,
+                "optional": true,
+                "target": null,
+                "tree": "target"
+              },
+              {
+                "name": "libc",
+                "package_key": "libc-0.2.186",
+                "kind": "normal",
+                "features": [],
                 "uses_default_features": false,
                 "optional": true,
                 "target": null,
@@ -2059,25 +2467,58 @@
             "features": [
               "CFArray",
               "CFAttributedString",
+              "CFAvailability",
+              "CFBag",
+              "CFBase",
+              "CFBinaryHeap",
+              "CFBitVector",
+              "CFBundle",
+              "CFByteOrder",
               "CFCGTypes",
               "CFCalendar",
               "CFCharacterSet",
               "CFData",
               "CFDate",
+              "CFDateFormatter",
               "CFDictionary",
               "CFError",
+              "CFFileDescriptor",
               "CFFileSecurity",
               "CFLocale",
               "CFMachPort",
               "CFMessagePort",
+              "CFNotificationCenter",
               "CFNumber",
+              "CFNumberFormatter",
+              "CFPlugIn",
+              "CFPlugInCOM",
+              "CFPreferences",
+              "CFPropertyList",
               "CFRunLoop",
               "CFSet",
+              "CFSocket",
               "CFStream",
               "CFString",
+              "CFStringEncodingExt",
+              "CFStringTokenizer",
+              "CFTimeZone",
+              "CFTree",
               "CFURL",
+              "CFURLAccess",
+              "CFURLEnumerator",
+              "CFUUID",
+              "CFUserNotification",
+              "CFUtilities",
+              "CFXMLNode",
+              "CFXMLParser",
+              "alloc",
               "bitflags",
-              "objc2"
+              "block2",
+              "default",
+              "dispatch2",
+              "libc",
+              "objc2",
+              "std"
             ]
           },
           "objc2-core-graphics-0.3.2": {
@@ -2095,12 +2536,34 @@
                 "tree": "target"
               },
               {
+                "name": "block2",
+                "package_key": "block2-0.6.2",
+                "kind": "normal",
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
+                "optional": true,
+                "target": null,
+                "tree": "target"
+              },
+              {
                 "name": "dispatch2",
                 "package_key": "dispatch2-0.3.1",
                 "kind": "normal",
                 "features": [
                   "alloc"
                 ],
+                "uses_default_features": false,
+                "optional": true,
+                "target": null,
+                "tree": "target"
+              },
+              {
+                "name": "libc",
+                "package_key": "libc-0.2.186",
+                "kind": "normal",
+                "features": [],
                 "uses_default_features": false,
                 "optional": true,
                 "target": null,
@@ -2123,34 +2586,84 @@
                 "package_key": "objc2-core-foundation-0.3.2",
                 "kind": "normal",
                 "features": [],
-                "uses_default_features": true,
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
               },
               {
-                "name": "objc2_io_surface",
-                "package_key": "objc2-io-surface-0.3.2",
+                "name": "objc2_metal",
+                "package_key": "objc2-metal-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "MTLDevice"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": "cfg(not(target_os = \"watchos\"))",
                 "tree": "target"
               }
             ],
             "build_dependencies": [],
             "features": [
+              "CGAffineTransform",
+              "CGBase",
+              "CGBitmapContext",
               "CGColor",
+              "CGColorConversionInfo",
               "CGColorSpace",
               "CGContext",
+              "CGConvertColorDataWithFormat",
+              "CGDataConsumer",
+              "CGDataProvider",
               "CGDirectDisplay",
+              "CGDirectDisplayMetal",
+              "CGDirectPalette",
+              "CGDisplayConfiguration",
+              "CGDisplayFade",
+              "CGDisplayStream",
+              "CGEXRToneMappingGamma",
+              "CGError",
+              "CGEvent",
+              "CGEventSource",
               "CGEventTypes",
               "CGFont",
+              "CGFunction",
+              "CGGeometry",
+              "CGGradient",
+              "CGITUToneMapping",
               "CGImage",
+              "CGLayer",
+              "CGPDFArray",
+              "CGPDFContentStream",
+              "CGPDFContext",
+              "CGPDFDictionary",
+              "CGPDFDocument",
+              "CGPDFObject",
+              "CGPDFOperatorTable",
+              "CGPDFPage",
+              "CGPDFScanner",
+              "CGPDFStream",
+              "CGPDFString",
+              "CGPSConverter",
               "CGPath",
+              "CGPattern",
+              "CGRemoteOperation",
+              "CGRenderingBufferProvider",
+              "CGSession",
+              "CGShading",
+              "CGToneMapping",
+              "CGWindow",
+              "CGWindowLevel",
+              "alloc",
               "bitflags",
-              "objc2"
+              "block2",
+              "default",
+              "dispatch2",
+              "libc",
+              "objc2",
+              "objc2-metal",
+              "std"
             ]
           },
           "objc2-core-image-0.3.2": {
@@ -2171,8 +2684,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -2217,17 +2732,7 @@
                 "package_key": "objc2-core-foundation-0.3.2",
                 "kind": "normal",
                 "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": null,
-                "tree": "target"
-              },
-              {
-                "name": "objc2_core_graphics",
-                "package_key": "objc2-core-graphics-0.3.2",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -2274,29 +2779,9 @@
                 "package_key": "objc2-core-foundation-0.3.2",
                 "kind": "normal",
                 "features": [],
-                "uses_default_features": true,
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
-                "tree": "target"
-              },
-              {
-                "name": "objc2_core_graphics",
-                "package_key": "objc2-core-graphics-0.3.2",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": null,
-                "tree": "target"
-              },
-              {
-                "name": "objc2_io_surface",
-                "package_key": "objc2-io-surface-0.3.2",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": "cfg(not(target_os = \"watchos\"))",
                 "tree": "target"
               }
             ],
@@ -2367,9 +2852,28 @@
                 "name": "objc2_core_foundation",
                 "package_key": "objc2-core-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
+                "features": [
+                  "CFArray",
+                  "CFAttributedString",
+                  "CFCGTypes",
+                  "CFCalendar",
+                  "CFCharacterSet",
+                  "CFData",
+                  "CFDate",
+                  "CFDictionary",
+                  "CFError",
+                  "CFFileSecurity",
+                  "CFLocale",
+                  "CFMachPort",
+                  "CFMessagePort",
+                  "CFRunLoop",
+                  "CFSet",
+                  "CFStream",
+                  "CFURL",
+                  "objc2"
+                ],
+                "uses_default_features": false,
+                "optional": true,
                 "target": null,
                 "tree": "target"
               }
@@ -2580,16 +3084,6 @@
                 "optional": true,
                 "target": null,
                 "tree": "target"
-              },
-              {
-                "name": "objc2_core_foundation",
-                "package_key": "objc2-core-foundation-0.3.2",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": null,
-                "tree": "target"
               }
             ],
             "build_dependencies": [],
@@ -2597,6 +3091,54 @@
               "IOSurfaceRef",
               "bitflags",
               "objc2"
+            ]
+          },
+          "objc2-metal-0.3.2": {
+            "runtime_dependencies": [
+              {
+                "name": "bitflags",
+                "package_key": "bitflags-2.12.1",
+                "kind": "normal",
+                "features": [
+                  "std"
+                ],
+                "uses_default_features": false,
+                "optional": true,
+                "target": null,
+                "tree": "target"
+              },
+              {
+                "name": "objc2",
+                "package_key": "objc2-0.6.4",
+                "kind": "normal",
+                "features": [
+                  "std"
+                ],
+                "uses_default_features": false,
+                "optional": false,
+                "target": null,
+                "tree": "target"
+              },
+              {
+                "name": "objc2_foundation",
+                "package_key": "objc2-foundation-0.3.2",
+                "kind": "normal",
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
+                "optional": false,
+                "target": null,
+                "tree": "target"
+              }
+            ],
+            "build_dependencies": [],
+            "features": [
+              "MTLDevice",
+              "MTLGPUAddress",
+              "MTLLibrary",
+              "MTLResource",
+              "bitflags"
             ]
           },
           "objc2-quartz-core-0.3.2": {
@@ -2629,8 +3171,10 @@
                 "name": "objc2_foundation",
                 "package_key": "objc2-foundation-0.3.2",
                 "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
+                "features": [
+                  "alloc"
+                ],
+                "uses_default_features": false,
                 "optional": false,
                 "target": null,
                 "tree": "target"
@@ -2679,66 +3223,6 @@
         }
       },
       "x86_64-unknown-linux-musl": {
-        "overrides": {
-          "kanchi-0.1.0": {
-            "runtime_dependencies": [
-              {
-                "name": "libc",
-                "package_key": "libc-0.2.186",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": null,
-                "tree": "target"
-              },
-              {
-                "name": "paste",
-                "package_key": "paste-1.0.15",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": null,
-                "tree": "host"
-              }
-            ],
-            "build_dependencies": [],
-            "features": []
-          }
-        }
-      },
-      "aarch64-unknown-linux-gnu": {
-        "overrides": {
-          "kanchi-0.1.0": {
-            "runtime_dependencies": [
-              {
-                "name": "libc",
-                "package_key": "libc-0.2.186",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": null,
-                "tree": "target"
-              },
-              {
-                "name": "paste",
-                "package_key": "paste-1.0.15",
-                "kind": "normal",
-                "features": [],
-                "uses_default_features": true,
-                "optional": false,
-                "target": null,
-                "tree": "host"
-              }
-            ],
-            "build_dependencies": [],
-            "features": []
-          }
-        }
-      },
-      "aarch64-unknown-linux-musl": {
         "overrides": {
           "kanchi-0.1.0": {
             "runtime_dependencies": [
@@ -2826,6 +3310,9 @@
       "edition": "2021"
     },
     "objc2-io-surface-0.3.2": {
+      "edition": "2021"
+    },
+    "objc2-metal-0.3.2": {
       "edition": "2021"
     },
     "objc2-quartz-core-0.3.2": {
