@@ -30,3 +30,8 @@ libc = "0.2"
 objc2 = "0.6"
 objc2-foundation = { version = "0.3", features = ["NSString", "NSUserDefaults"] }
 objc2-app-kit = { version = "0.3", features = ["NSScreen", "NSApplication"] }
+# CoreGraphics display-mode enumeration for the panel-vs-framebuffer downscale
+# ratio (display_scaling_ratio) — the seam-auto-tune probe. CGDirectDisplay
+# transitively enables objc2-core-foundation/CFArray (the mode list).
+objc2-core-graphics = { version = "0.3", features = ["CGDirectDisplay"] }
+objc2-core-foundation = { version = "0.3", features = ["CFBase", "CFArray"] }

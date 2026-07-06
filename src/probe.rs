@@ -49,6 +49,31 @@ pub fn appearance_dark() -> Option<bool> {
     }
 }
 
+/// Panel-vs-framebuffer downscale ratio — physical panel px ÷ the framebuffer
+/// px the OS renders into, for the main display.
+///
+/// `< 1.0` means the OS compositor DOWNSCALES the app's framebuffer to a
+/// smaller physical panel (a macOS "scaled" / "More Space" mode) — the
+/// row-seam condition an integer-cell terminal can't fix in its own
+/// framebuffer. `1.0` means the framebuffer IS the panel grid (Default /
+/// integer-Retina mode → no seam). `None` off-macOS or when the display
+/// geometry can't be read; consumers treat `None` as 1.0 (no adjustment),
+/// so a failed probe is always a safe no-op.
+///
+/// macOS-only today (CoreGraphics display modes); Wayland/X11/Windows land as
+/// future `cfg` arms behind the same signature.
+#[must_use]
+pub fn display_scaling_ratio() -> Option<f32> {
+    #[cfg(target_os = "macos")]
+    {
+        mac::display_scaling_ratio()
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        None
+    }
+}
+
 /// Total physical RAM in GiB. macOS `sysctl hw.memsize`; Linux
 /// `/proc/meminfo`; `None` elsewhere.
 #[must_use]
@@ -175,5 +200,75 @@ mod mac {
         let key = NSString::from_str("AppleInterfaceStyle");
         let style = defaults.stringForKey(&key);
         Some(style.is_some_and(|s| s.to_string().eq_ignore_ascii_case("dark")))
+    }
+
+    pub fn display_scaling_ratio() -> Option<f32> {
+        use objc2_core_foundation::{CFArrayGetCount, CFArrayGetValueAtIndex};
+        use objc2_core_graphics::{
+            CGDisplayCopyAllDisplayModes, CGDisplayCopyDisplayMode, CGDisplayMode,
+            CGDisplayModeGetIOFlags, CGDisplayModeGetPixelHeight, CGMainDisplayID,
+        };
+
+        // macOS tags the display's true panel mode with this IOKit flag;
+        // its pixel height is the physical panel resolution regardless of a
+        // supersampled scaled mode being active. (kDisplayModeNativeFlag.)
+        const NATIVE_MODE_FLAG: u32 = 0x0200_0000;
+
+        let display = CGMainDisplayID();
+
+        // The framebuffer the OS renders into = the CURRENT mode's pixel height.
+        let current = CGDisplayCopyDisplayMode(display)?;
+        let fb_h = CGDisplayModeGetPixelHeight(Some(&current));
+        if fb_h == 0 {
+            return None;
+        }
+
+        // The physical panel = the pixel height of the native-flagged mode.
+        // SAFETY: `None` options requests the default mode list; the returned
+        // CFArray owns its CGDisplayMode values, valid while `modes` lives.
+        let modes = unsafe { CGDisplayCopyAllDisplayModes(display, None) }?;
+        let count = unsafe { CFArrayGetCount(&modes) };
+        let mut panel_h: usize = 0;
+        for i in 0..count {
+            // SAFETY: 0 <= i < count; the value is a CGDisplayModeRef
+            // borrowed from the retained array for the loop body only.
+            let ptr = unsafe { CFArrayGetValueAtIndex(&modes, i) }.cast::<CGDisplayMode>();
+            if ptr.is_null() {
+                continue;
+            }
+            let mode = unsafe { &*ptr };
+            if CGDisplayModeGetIOFlags(Some(mode)) & NATIVE_MODE_FLAG != 0 {
+                let h = CGDisplayModeGetPixelHeight(Some(mode));
+                if h > panel_h {
+                    panel_h = h;
+                }
+            }
+        }
+        if panel_h == 0 {
+            return None;
+        }
+
+        #[allow(clippy::cast_precision_loss)]
+        let ratio = panel_h as f32 / fb_h as f32;
+        // Trust only a plausible ratio. The consumer clamps to [0.25, 1.0] and
+        // only snaps when < 1.0 (a downscale), so an integer/Default mode
+        // (ratio 1.0) and an upscale (> 1.0) both no-op safely.
+        (ratio.is_finite() && (0.3..=3.0).contains(&ratio)).then_some(ratio)
+    }
+}
+
+#[cfg(test)]
+mod display_probe_tests {
+    /// The downscale ratio is either `None` (headless / off-macOS) or a
+    /// plausible panel/framebuffer ratio — never a garbage value that could
+    /// mis-snap a consumer's cell grid.
+    #[test]
+    fn display_scaling_ratio_is_none_or_plausible() {
+        if let Some(r) = super::display_scaling_ratio() {
+            assert!((0.3..=3.0).contains(&r), "implausible ratio {r}");
+            eprintln!("display_scaling_ratio() = {r}");
+        } else {
+            eprintln!("display_scaling_ratio() = None (headless / no display)");
+        }
     }
 }
