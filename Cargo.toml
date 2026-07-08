@@ -1,6 +1,6 @@
 [package]
 name = "kanchi"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 rust-version = "1.89.0"
 description = "Kanchi (感知 — \"sensing\") — typed environment-discovery primitive: declare detection axes, get the FALLBACK const + detect()→Option + detect_or_fallback() trio generated. The shikumi `discovered()` tier made declarative."
