@@ -43,6 +43,15 @@ Platform FFI belongs in `src/probe.rs` only — never in a consumer. Add a
 `pub fn <name>(...) -> Option<T>`, feature-gate the OS backend, and document the
 fallback semantics. Consumers reference it from a `defaxes!` axis.
 
+## The standard seam — shikumi's `discovered()` tier
+
+kanchi axes are the fleet-standard source for a `TieredConfig::discovered()` tier
+(`theory/CONFIGURATION-MANAGEMENT.md` Primitive 5). Compose them declaratively via
+shikumi's `discovered_from_layers(&[…])` — one `DiscoveryLayer` per axis-group,
+each building a partial `Dict` from `detect_*_or_fallback()` — never a hand-rolled
+`discovered()` struct literal. The empty-answer case degenerates to `bare()`
+(discovery totality). See `shikumi/docs/PROGRESSIVE-DISCOVERY-VERIFICATION.md`.
+
 ## First consumer
 
 `pleme-io/mado` — `auto_detect` window dims / font size / scrollback are
