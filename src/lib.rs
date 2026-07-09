@@ -32,7 +32,13 @@
 //! lands cleanly on the fallback.
 
 pub mod axes;
+pub mod cluster;
 pub mod probe;
+
+pub use cluster::{
+    ClusterEnv, ClusterServiceDns, HostClusterEnv, MockClusterEnv, pod_name, pod_namespace,
+    resolve_service, service_reachable,
+};
 
 /// Re-export for the `defaxes!` macro's identifier-pasting. Not public API.
 #[doc(hidden)]
