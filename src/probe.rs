@@ -202,17 +202,74 @@ mod mac {
         Some(style.is_some_and(|s| s.to_string().eq_ignore_ascii_case("dark")))
     }
 
+    /// macOS tags the display's true panel mode with this IOKit flag; its
+    /// pixel height is the physical panel resolution regardless of a
+    /// supersampled scaled mode being active. (kDisplayModeNativeFlag.)
+    pub(super) const NATIVE_MODE_FLAG: u32 = 0x0200_0000;
+
+    /// Pure panel-height selection over the mode table — the testable heart of
+    /// `display_scaling_ratio`. `modes` is `(pixel_height, is_native_flagged)`
+    /// for every enumerated display mode; `fb_h` is the current framebuffer's
+    /// pixel height. Returns the physical panel's pixel height, or `None` when
+    /// the table carries no usable height.
+    ///
+    /// Selection order (empirically grounded on the built-in Liquid Retina XDR,
+    /// live mode dump 2026-07-11 — see `examples/display_modes_dump.rs`):
+    /// 1. If any mode carries the native flag, the panel is the **max native**
+    ///    pixel height (the XDR reports its 3456×2234 panel this way; a
+    ///    4112×2658 supersampled "More Space" framebuffer is a *non*-native
+    ///    scaled mode, so it is correctly excluded).
+    /// 2. Otherwise fall back to the **max pixel height across all modes** — on
+    ///    a scaled display the panel mode is still the tallest present, and this
+    ///    keeps the probe answering on a hypothetical display whose native flag
+    ///    is absent rather than silently returning 1.0.
+    ///
+    /// The caller turns `panel_h / fb_h` into the downscale ratio.
+    #[must_use]
+    pub(super) fn select_panel_height(fb_h: usize, modes: &[(usize, bool)]) -> Option<usize> {
+        let max_native = modes
+            .iter()
+            .filter(|(_, native)| *native)
+            .map(|(h, _)| *h)
+            .max()
+            .filter(|h| *h > 0);
+        if let Some(h) = max_native {
+            return Some(h);
+        }
+        // No native-flagged mode: the panel is the tallest mode we can see.
+        // Bound below by `fb_h` so a table that only lists scaled-down modes
+        // never invents a downscale (panel < framebuffer would be an upscale,
+        // which the ratio math treats as no-op anyway).
+        modes
+            .iter()
+            .map(|(h, _)| *h)
+            .chain(std::iter::once(fb_h))
+            .max()
+            .filter(|h| *h > 0)
+    }
+
+    /// Turn a selected panel height + framebuffer height into a plausible
+    /// downscale ratio, or `None` if implausible. Extracted so the numeric
+    /// tail is unit-testable independent of CoreGraphics.
+    #[must_use]
+    pub(super) fn ratio_from_heights(panel_h: usize, fb_h: usize) -> Option<f32> {
+        if panel_h == 0 || fb_h == 0 {
+            return None;
+        }
+        #[allow(clippy::cast_precision_loss)]
+        let ratio = panel_h as f32 / fb_h as f32;
+        // Trust only a plausible ratio. The consumer clamps to [0.25, 1.0] and
+        // only snaps when < 1.0 (a downscale), so an integer/Default mode
+        // (ratio 1.0) and an upscale (> 1.0) both no-op safely.
+        (ratio.is_finite() && (0.3..=3.0).contains(&ratio)).then_some(ratio)
+    }
+
     pub fn display_scaling_ratio() -> Option<f32> {
         use objc2_core_foundation::{CFArrayGetCount, CFArrayGetValueAtIndex};
         use objc2_core_graphics::{
             CGDisplayCopyAllDisplayModes, CGDisplayCopyDisplayMode, CGDisplayMode,
             CGDisplayModeGetIOFlags, CGDisplayModeGetPixelHeight, CGMainDisplayID,
         };
-
-        // macOS tags the display's true panel mode with this IOKit flag;
-        // its pixel height is the physical panel resolution regardless of a
-        // supersampled scaled mode being active. (kDisplayModeNativeFlag.)
-        const NATIVE_MODE_FLAG: u32 = 0x0200_0000;
 
         let display = CGMainDisplayID();
 
@@ -223,12 +280,13 @@ mod mac {
             return None;
         }
 
-        // The physical panel = the pixel height of the native-flagged mode.
-        // SAFETY: `None` options requests the default mode list; the returned
-        // CFArray owns its CGDisplayMode values, valid while `modes` lives.
+        // Collect (pixel_height, is_native) for every mode, then select the
+        // panel height purely (testable). SAFETY: `None` options requests the
+        // default mode list; the returned CFArray owns its CGDisplayMode
+        // values, valid while `modes` lives.
         let modes = unsafe { CGDisplayCopyAllDisplayModes(display, None) }?;
-        let count = unsafe { CFArrayGetCount(&modes) };
-        let mut panel_h: usize = 0;
+        let count = CFArrayGetCount(&modes);
+        let mut table: Vec<(usize, bool)> = Vec::with_capacity(count.max(0) as usize);
         for i in 0..count {
             // SAFETY: 0 <= i < count; the value is a CGDisplayModeRef
             // borrowed from the retained array for the loop body only.
@@ -237,28 +295,20 @@ mod mac {
                 continue;
             }
             let mode = unsafe { &*ptr };
-            if CGDisplayModeGetIOFlags(Some(mode)) & NATIVE_MODE_FLAG != 0 {
-                let h = CGDisplayModeGetPixelHeight(Some(mode));
-                if h > panel_h {
-                    panel_h = h;
-                }
-            }
-        }
-        if panel_h == 0 {
-            return None;
+            let h = CGDisplayModeGetPixelHeight(Some(mode));
+            let native = CGDisplayModeGetIOFlags(Some(mode)) & NATIVE_MODE_FLAG != 0;
+            table.push((h, native));
         }
 
-        #[allow(clippy::cast_precision_loss)]
-        let ratio = panel_h as f32 / fb_h as f32;
-        // Trust only a plausible ratio. The consumer clamps to [0.25, 1.0] and
-        // only snaps when < 1.0 (a downscale), so an integer/Default mode
-        // (ratio 1.0) and an upscale (> 1.0) both no-op safely.
-        (ratio.is_finite() && (0.3..=3.0).contains(&ratio)).then_some(ratio)
+        let panel_h = select_panel_height(fb_h, &table)?;
+        ratio_from_heights(panel_h, fb_h)
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, target_os = "macos"))]
 mod display_probe_tests {
+    use super::mac::{ratio_from_heights, select_panel_height};
+
     /// The downscale ratio is either `None` (headless / off-macOS) or a
     /// plausible panel/framebuffer ratio — never a garbage value that could
     /// mis-snap a consumer's cell grid.
@@ -270,5 +320,91 @@ mod display_probe_tests {
         } else {
             eprintln!("display_scaling_ratio() = None (headless / no display)");
         }
+    }
+
+    /// The exact mode table dumped live from the built-in Liquid Retina XDR on
+    /// the "More Space" scaling (2026-07-11; `examples/display_modes_dump.rs`):
+    /// a 4112×2658 supersampled framebuffer (current, NON-native) downscaled to
+    /// the physical 3456×2234 panel (the native-flagged mode). Only the panel
+    /// mode carries the native flag; every scaled mode does not. The probe must
+    /// therefore pick 2234 (panel), NOT 2658 (framebuffer), yielding 0.8404.
+    #[test]
+    fn xdr_more_space_selects_physical_panel_not_framebuffer() {
+        // (pixel_height, is_native) — abridged to the distinct heights present
+        // in the live dump; every non-native scaled height plus the 6 native
+        // 2234 rows. fb_h is the current framebuffer's pixel height (2658).
+        let modes: Vec<(usize, bool)> = vec![
+            (1200, false),
+            (1460, false),
+            (1510, false),
+            (1600, false),
+            (1640, false),
+            (1696, false),
+            (1870, false),
+            (1934, false),
+            (2160, false),
+            (2234, true), // the native-flagged physical panel
+        ];
+        let fb_h = 2658;
+        let panel_h = select_panel_height(fb_h, &modes).expect("panel height");
+        assert_eq!(panel_h, 2234, "must pick the native-flagged physical panel");
+        let ratio = ratio_from_heights(panel_h, fb_h).expect("ratio");
+        assert!(
+            (ratio - 0.840_481_6).abs() < 1.0e-4,
+            "XDR More-Space ratio must be ~0.8405, got {ratio}"
+        );
+    }
+
+    /// A conventional Default / integer-Retina 2× display: the framebuffer IS
+    /// the panel grid, so the current mode carries the native flag and its
+    /// pixel height equals the framebuffer. Ratio must be exactly 1.0 — the
+    /// integer-scale path stays untouched (no seam snap engages).
+    #[test]
+    fn default_retina_2x_yields_unity_ratio() {
+        // A typical MBP built-in at Default scaling: native mode == framebuffer.
+        let modes: Vec<(usize, bool)> = vec![
+            (900, false),  // scaled-down 1x-ish choices
+            (1050, false),
+            (1200, false),
+            (1600, true), // native panel == current framebuffer
+        ];
+        let fb_h = 1600;
+        let panel_h = select_panel_height(fb_h, &modes).expect("panel height");
+        assert_eq!(panel_h, 1600);
+        let ratio = ratio_from_heights(panel_h, fb_h).expect("ratio");
+        assert!(
+            (ratio - 1.0).abs() < 1.0e-6,
+            "default 2x must yield unity ratio, got {ratio}"
+        );
+    }
+
+    /// Fallback: a display whose native flag is absent from the table still
+    /// answers, picking the tallest mode as the panel rather than returning
+    /// 1.0 by giving up. Here the panel (2234) is present but unflagged.
+    #[test]
+    fn fallback_picks_tallest_when_no_native_flag() {
+        let modes: Vec<(usize, bool)> = vec![
+            (1600, false),
+            (2160, false),
+            (2234, false), // panel, but the native flag is (hypothetically) missing
+        ];
+        let fb_h = 2658;
+        let panel_h = select_panel_height(fb_h, &modes).expect("panel height");
+        assert_eq!(panel_h, 2658.max(2234)); // bounded below by fb_h → 2658
+        // With fb bounding, panel==fb → unity (no invented downscale). Honest:
+        // without the native flag we cannot distinguish a downscale, so we
+        // decline to snap rather than guess a seam correction.
+        let ratio = ratio_from_heights(panel_h, fb_h).expect("ratio");
+        assert!((ratio - 1.0).abs() < 1.0e-6);
+    }
+
+    /// An upscaled (rare) or degenerate table never produces a snap-triggering
+    /// ratio below 1.0 from garbage; implausible ratios return `None`.
+    #[test]
+    fn implausible_ratio_is_rejected() {
+        assert!(ratio_from_heights(0, 2658).is_none());
+        assert!(ratio_from_heights(2234, 0).is_none());
+        // A wildly-out-of-range ratio (10000 panel / 100 fb) is rejected.
+        assert!(ratio_from_heights(10_000, 100).is_none());
     }
 }
