@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "cargo_lock_sha256": "4b829a0352f4298c92b31adc2ec16a9547f462b28340b4b49c2faf2ea48e0556",
+  "cargo_lock_sha256": "4cf85f2a33f23710aab0d25014e987099af9d633269f298d19baa4a4ccd26221",
   "target_resolves": {
     "base": {
       "libc-0.2.186": {
@@ -80,7 +80,7 @@
               "objc2"
             ]
           },
-          "kanchi-0.1.1": {
+          "kanchi-0.1.2": {
             "runtime_dependencies": [
               {
                 "name": "libc",
@@ -1577,7 +1577,7 @@
       },
       "aarch64-unknown-linux-gnu": {
         "overrides": {
-          "kanchi-0.1.1": {
+          "kanchi-0.1.2": {
             "runtime_dependencies": [
               {
                 "name": "libc",
@@ -1607,7 +1607,7 @@
       },
       "aarch64-unknown-linux-musl": {
         "overrides": {
-          "kanchi-0.1.1": {
+          "kanchi-0.1.2": {
             "runtime_dependencies": [
               {
                 "name": "libc",
@@ -1697,7 +1697,7 @@
               "objc2"
             ]
           },
-          "kanchi-0.1.1": {
+          "kanchi-0.1.2": {
             "runtime_dependencies": [
               {
                 "name": "libc",
@@ -3194,7 +3194,7 @@
       },
       "x86_64-unknown-linux-gnu": {
         "overrides": {
-          "kanchi-0.1.1": {
+          "kanchi-0.1.2": {
             "runtime_dependencies": [
               {
                 "name": "libc",
@@ -3224,7 +3224,7 @@
       },
       "x86_64-unknown-linux-musl": {
         "overrides": {
-          "kanchi-0.1.1": {
+          "kanchi-0.1.2": {
             "runtime_dependencies": [
               {
                 "name": "libc",
@@ -3264,7 +3264,7 @@
     "dispatch2-0.3.1": {
       "edition": "2021"
     },
-    "kanchi-0.1.1": {
+    "kanchi-0.1.2": {
       "edition": "2024",
       "lib_target": {
         "name": "kanchi",

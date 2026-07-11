@@ -95,9 +95,9 @@ rec {
     crates = {
       "bitflags" = rec {
         crateName = "bitflags";
-        version = "2.12.1";
+        version = "2.13.0";
         edition = "2021";
-        sha256 = "02phhjm7w380zdh8928zf13cfi1bw2qz2ay36ml2jmwmmv8cxmw4";
+        sha256 = "1y239gpvl061rfvav7jds8mjs42kmwi39is7yx5d1qw3hvp8nf5l";
         authors = [
           "The Rust Project Developers"
         ];
@@ -173,7 +173,7 @@ rec {
       };
       "kanchi" = rec {
         crateName = "kanchi";
-        version = "0.1.1";
+        version = "0.1.2";
         edition = "2024";
         src = lib.cleanSourceWith { filter = sourceFilter;  src = ./.; };
         dependencies = [
