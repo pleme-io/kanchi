@@ -1,6 +1,9 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "cargo_lock_sha256": "344085c052e2567ee5d4f0fe0e3ae41299a26dbcea051fc77893062beac4a57f",
+  "manifest_sha256": {
+    "Cargo.toml": "af666dac223e18ed38017d0c375e204e4afab25bcc2d6674ca06dd6092c983e7"
+  },
   "target_resolves": {
     "base": {
       "libc-0.2.189": {
