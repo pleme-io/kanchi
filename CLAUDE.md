@@ -1,6 +1,6 @@
 # kanchi (感知) — Typed Environment-Discovery Primitive
 
-> **★★★ CSE / Knowable Construction.** This repo operates under **Constructive Substrate Engineering** — canonical specification at [`pleme-io/theory/CONSTRUCTIVE-SUBSTRATE-ENGINEERING.md`](https://github.com/pleme-io/theory/blob/main/CONSTRUCTIVE-SUBSTRATE-ENGINEERING.md). The Compounding Directive (operational rules: solve once, load-bearing fixes only, idiom-first, models stay current, direction beats velocity) is in the org-level pleme-io/CLAUDE.md ★★★ section. Read both before non-trivial changes.
+> **★★★ CSE / Knowable Construction.** This repo operates under **Constructive Substrate Engineering**. The Compounding Directive (operational rules: solve once, load-bearing fixes only, idiom-first, models stay current, direction beats velocity) is in the org-level pleme-io/CLAUDE.md ★★★ section. Read it before non-trivial changes.
 
 ## Build & Test
 
@@ -29,8 +29,8 @@ platform FFI; declare axes with `kanchi::defaxes!` and the platform probes live
 
 ### Cluster discovery — the ConfigPlane DISCOVERED tier (`src/cluster.rs`)
 
-The `discovered()` reach into the *running cluster* (per
-`theory/CONFIGURATION-MANAGEMENT.md` §IX). Three probe classes, split by cost:
+The `discovered()` reach into the *running cluster*.
+Three probe classes, split by cost:
 
 - **downward-API** — `pod_namespace()` / `pod_name()`: pure `std` env reads
   (`POD_NAMESPACE`/`POD_NAME`, the chart injects them via `fieldRef`), with the
@@ -68,8 +68,8 @@ fallback semantics. Consumers reference it from a `defaxes!` axis.
 
 ## The standard seam — shikumi's `discovered()` tier
 
-kanchi axes are the fleet-standard source for a `TieredConfig::discovered()` tier
-(`theory/CONFIGURATION-MANAGEMENT.md` Primitive 5). Compose them declaratively via
+kanchi axes are the fleet-standard source for a `TieredConfig::discovered()` tier.
+Compose them declaratively via
 shikumi's `discovered_from_layers(&[…])` — one `DiscoveryLayer` per axis-group,
 each building a partial `Dict` from `detect_*_or_fallback()` — never a hand-rolled
 `discovered()` struct literal. The empty-answer case degenerates to `bare()`
